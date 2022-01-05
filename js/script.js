@@ -1,5 +1,8 @@
 /*jshint esversion: 6 */
 
+/* Обязательное задание */
+/* Promise. Fetch. */
+
 const getData = () => {
 	return fetch('db.json')
 		.then((res) => res.json())
@@ -33,25 +36,27 @@ sendData(getData());
 
 /* Усложненное задание */
 /* XMLHttpRequest */
+
 const xhrGet = new XMLHttpRequest();
 xhrGet.open('GET', 'db.json', [false]);
 xhrGet.send();
 xhrGet.onload = function () {
 	let response = xhrGet.response;
-	response = JSON.stringify(response);
-	// Убрать все символы: \r\n \ и пробелы в 4 знака
-	// потом сделать JSON.parse()
+	response = JSON.stringify(response)
+		.replace(/\s\s\s\s/gi, ' ')
+		.replace(/\\r\\n/gi, '')
+		.replace(/\\/gi, '');
 	console.log(response);
-	return response;
+	xhrSend(response);
 };
 
-let xhrSend = new XMLHttpRequest();
-xhrSend.open('POST', 'https://jsonplaceholder.typicode.com/posts', [false]);
-xhrSend.send(xhrGet.onload());
-xhrSend.onload = function () {
-	let response = xhrSend.response;
-	response = JSON.stringify(response);
-	// Убрать все символы: \r\n \ и пробелы в 4 знака
-	// потом сделать JSON.parse()
-	console.log(response);
+const xhrSend = function (response) {
+	let xhrSend = new XMLHttpRequest();
+	xhrSend.open('POST', 'https://jsonplaceholder.typicode.com/posts', [false]);
+	xhrSend.send(response);
+	xhrSend.onload = function () {
+		let response = xhrSend.response;
+		response = JSON.stringify(response).replace(/\s\s/gi, ' ').replace(/n/gi, '').replace(/\\/gi, '');
+		console.log(response);
+	};
 };
