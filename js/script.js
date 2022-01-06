@@ -41,11 +41,7 @@ const xhrGet = new XMLHttpRequest();
 xhrGet.open('GET', 'db.json', [false]);
 xhrGet.send();
 xhrGet.onload = function () {
-	let response = xhrGet.response;
-	response = JSON.stringify(response)
-		.replace(/\s\s\s\s/gi, ' ')
-		.replace(/\\r\\n/gi, '')
-		.replace(/\\/gi, '');
+	let response = JSON.parse(xhrGet.response);
 	console.log(response);
 	xhrSend(response);
 };
@@ -55,8 +51,7 @@ const xhrSend = function (response) {
 	xhrSend.open('POST', 'https://jsonplaceholder.typicode.com/posts', [false]);
 	xhrSend.send(response);
 	xhrSend.onload = function () {
-		let response = xhrSend.response;
-		response = JSON.stringify(response).replace(/\s\s/gi, ' ').replace(/n/gi, '').replace(/\\/gi, '');
+		let response = JSON.parse(xhrSend.response);
 		console.log(response);
 	};
 };
